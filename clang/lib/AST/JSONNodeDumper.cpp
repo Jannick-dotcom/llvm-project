@@ -282,11 +282,8 @@ void JSONNodeDumper::writeBareSourceLocation(SourceLocation Loc,
 
   if (Presumed.isValid()) {
     JOS.attribute("offset", SM.getDecomposedLoc(Loc).second);
-    if (LastLocFilename != ActualFile) {
-      JOS.attribute("file", ActualFile);
-      JOS.attribute("line", ActualLine);
-    } else if (LastLocLine != ActualLine)
-      JOS.attribute("line", ActualLine);
+    JOS.attribute("file", ActualFile);
+    JOS.attribute("line", ActualLine);
 
     StringRef PresumedFile = Presumed.getFilename();
     if (PresumedFile != ActualFile && LastLocPresumedFilename != PresumedFile)
@@ -316,7 +313,6 @@ void JSONNodeDumper::writeSourceLocation(SourceLocation Loc) {
   SourceLocation Spelling = SM.getSpellingLoc(Loc);
   SourceLocation Expansion = SM.getExpansionLoc(Loc);
 
-  if (Expansion != Spelling) {
     // If the expansion and the spelling are different, output subobjects
     // describing both locations.
     JOS.attributeObject("spellingLoc", [Spelling, this] {
@@ -329,8 +325,6 @@ void JSONNodeDumper::writeSourceLocation(SourceLocation Loc) {
       if (SM.isMacroArgExpansion(Loc))
         JOS.attribute("isMacroArgExpansion", true);
     });
-  } else
-    writeBareSourceLocation(Spelling, /*IsSpelling*/ true);
 }
 
 void JSONNodeDumper::writeSourceRange(SourceRange R) {
