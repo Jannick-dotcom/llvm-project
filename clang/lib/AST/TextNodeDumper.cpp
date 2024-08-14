@@ -773,17 +773,10 @@ void TextNodeDumper::dumpLocation(SourceLocation Loc) {
     return;
   }
 
-  if (strcmp(PLoc.getFilename(), LastLocFilename) != 0) {
-    OS << PLoc.getFilename() << ':' << PLoc.getLine() << ':'
-       << PLoc.getColumn();
-    LastLocFilename = PLoc.getFilename();
-    LastLocLine = PLoc.getLine();
-  } else if (PLoc.getLine() != LastLocLine) {
-    OS << "line" << ':' << PLoc.getLine() << ':' << PLoc.getColumn();
-    LastLocLine = PLoc.getLine();
-  } else {
-    OS << "col" << ':' << PLoc.getColumn();
-  }
+  OS << PLoc.getFilename() << ':' << PLoc.getLine() << ':'
+      << PLoc.getColumn();
+  LastLocFilename = PLoc.getFilename();
+  LastLocLine = PLoc.getLine();
 }
 
 void TextNodeDumper::dumpSourceRange(SourceRange R) {
